@@ -45,6 +45,7 @@ public class buster {
 		CsvSchema bootstrap = CsvSchema.builder()
 						.addColumn("code")
 						.addColumn("type")
+						.addColumn("flag")
 						.build();
 		
 		bootstrap =	bootstrap
@@ -67,31 +68,33 @@ public class buster {
 		String status;
 		String location;
 		for (EntBillInfo bill : lstBillInfo) {
-			entResult = new EntBillResult();
-			entResult.setCode(bill.getCode());
-			
-			
-			String url = String.format(URL_FORMAT, bill.getCode()
-												 , EnumType.getTypeByKey(bill.getType()));
-			Document doc = Jsoup.connect(url).get();
-			Elements e = doc.select(".mGrid tr:last-child td");
-
-			date = CANNOT_FOUNT;
-			time = CANNOT_FOUNT;
-			status = CANNOT_FOUNT;
-			location = CANNOT_FOUNT;
-			
-			if (e != null && e.size() > 0) {
-				date = e.get(1).text();
-				time = e.get(2).text();
-				status = e.get(3).text();
-				location = e.get(4).text();
+			if (bill.getFlag() > 0) { 
+				entResult = new EntBillResult();
+				entResult.setCode(bill.getCode());
+				
+				
+				String url = String.format(URL_FORMAT, bill.getCode()
+													 , EnumType.getTypeByKey(bill.getType()));
+				Document doc = Jsoup.connect(url).get();
+				Elements e = doc.select(".mGrid tr:last-child td");
+	
+				date = CANNOT_FOUNT;
+				time = CANNOT_FOUNT;
+				status = CANNOT_FOUNT;
+				location = CANNOT_FOUNT;
+				
+				if (e != null && e.size() > 0) {
+					date = e.get(1).text();
+					time = e.get(2).text();
+					status = e.get(3).text();
+					location = e.get(4).text();
+				}
+				entResult.setDate(date);
+				entResult.setTime(time);
+				entResult.setLocation(location);
+				entResult.setStatus(status);
+				lstResult.add(entResult);
 			}
-			entResult.setDate(date);
-			entResult.setTime(time);
-			entResult.setLocation(location);
-			entResult.setStatus(status);
-			lstResult.add(entResult);
 		}
 		
 		return lstResult;
