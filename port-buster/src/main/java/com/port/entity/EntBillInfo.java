@@ -3,6 +3,7 @@ package com.port.entity;
 public class EntBillInfo {
 	private String code;
 	private String type;
+	private int flag;
 	public String getCode() {
 		return code;
 	}
@@ -14,5 +15,11 @@ public class EntBillInfo {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getFlag() {
+		return flag;
+	}
+	public void setFlag(int flag) {
+		this.flag = flag;
 	}
 }
